@@ -4,9 +4,9 @@ from fastapi import FastAPI, Body
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
-# import support
-# load_dotenv()
-# temp = pd.read_csv("PBLFinalDatawithClusters.csv")
+import support
+load_dotenv()
+temp = pd.read_csv("PBLFinalDatawithClusters.csv")
 
 
 # app = Flask(__name__)

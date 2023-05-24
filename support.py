@@ -18,9 +18,9 @@ import base64
 from requests import post,get
 from sklearn.cluster import KMeans
 
-data = np.load("D:/shit/pbl/new models/pbldat.npy", allow_pickle= True)
-nf = pickle.load(open("D:/shit/pbl/new models/PBLKNN.pkl",'rb'))
-model = pickle.load(open("D:/shit/pbl/new models/SPalt.pkl",'rb'))
+data = np.load("pbldat.npy", allow_pickle= True)
+nf = pickle.load(open("PBLKNN.pkl",'rb'))
+model = pickle.load(open("SPalt.pkl",'rb'))
 
 nf =  np.array(nf)
 

@@ -60,7 +60,6 @@ async def process_string(weight_string: str):
                     }
         json_val[count] = temp_json
         count += 1
-    json_val    
         
     print(track_names)
     return json_val

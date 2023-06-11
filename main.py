@@ -1,28 +1,38 @@
-# from flask import Flask, request
-from fastapi import FastAPI, Body
-
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 import support
+from fastapi import FastAPI
+
+from fastapi.middleware.cors import CORSMiddleware
+
 load_dotenv()
 temp = pd.read_csv("PBLFinalDatawithClusters.csv")
 
-
-# app = Flask(__name__)
 app = FastAPI()
+origins = [
+    'https://fastapi-production-3bee.up.railway.app'
+]
 
-# @app.route('/get_recomm')
-# def show():
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers = ["*"]
+)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.route('/show')
+def show():
+    return "working"
+
+@app.get("/test")
+async def fortest_string(test_string: str):
+    temp = test_string.upper()
+    return temp
 
 @app.post("/get_recomm")
 async def process_string(weight_string: str):
-    print(weight_string)
-    # weight = '0.3+0.5+0+0+0+0+0+0+0+0+0+0+0+0'
     print('something')
     weight_vec = []
     s = ""
@@ -47,8 +57,17 @@ async def process_string(weight_string: str):
     for i in range(5):
         uri_ls.append(temp['uri'][index[0][i]])
     track_names = []
+    weights = []
     for i in uri_ls:
         track_names.append(support.get_track_name(token, i))
+        temp1 = support.get_track_info(token, i)
+        s = ""
+        lst = ["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature"]
+        for i in lst:
+            s += "+" + str(temp1[i])
+        s  = s[1:] + "+0+0"
+        weights.append(s)
+    
     json_val = {}
     count = 0
     for i in track_names:
@@ -56,11 +75,11 @@ async def process_string(weight_string: str):
                     "artist":i[1],
                     "poster_link":i[2],
                     "redirect_link":i[3],
-                    "preview_link": i[4]
+                    "preview_link": i[4],
+                    "weight_str":weights[count]
                     }
         json_val[count] = temp_json
-        count += 1
-        
-    print(track_names)
+        count += 1        
+    print('result is: ',track_names)
+    print(type(json_val))
     return json_val
-

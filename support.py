@@ -56,3 +56,10 @@ def get_track_name(token, track_id):
     ans = [name,artist,url,dir_url,pre_url]
     return ans     
 
+def get_track_info(token, track_id):
+    url = f"https://api.spotify.com/v1/audio-features/{track_id}"
+
+    headers = get_auth_header(token)
+    result1 = get(url, headers = headers)
+    json_result1 = json.loads(result1.content)
+    return(json_result1)
